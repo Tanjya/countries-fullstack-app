@@ -34,3 +34,21 @@ def create_country(country: CountryCreate):
     countries.append(new_country)
 
     return new_country
+
+@app.delete("/countries/{country_id}")
+def delete_country(country_id: int):
+    for country in countries:
+        if country["id"] == country_id:
+            countries.remove(country)
+            return {"message": "Country deleted"}
+
+    raise HTTPException(status_code=404, detail="Country not found")
+
+@app.put("/countries/{country_id}")
+def update_country(country_id: int, updated_country: CountryCreate):
+    for country in countries:
+        if country["id"] == country_id:
+            country["name"] = updated_country.name
+            return country
+
+    raise HTTPException(status_code=404, detail="Country not found")
